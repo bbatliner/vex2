@@ -1,18 +1,14 @@
 {
-  "name": "vex-no-jquery",
-  "version": "3.0.0",
-  "homepage": "http://github.hubspot.com/vex/docs/welcome",
+  "name": "vex2",
+  "version": "1.0.0",
+  "homepage": "https://github.com/bbatliner/vex2",
   "authors": [
     "Brendan Batliner <brendan@omnipointment.com>"
   ],
-  "description": "Beautiful, functional, dialogs in vanilla JavaScript",
+  "description": "Beautiful, functional dialogs in vanilla JavaScript",
   "main": [
-    "dist/vex.js",
-    "dist/vex.dialog.js",
-    "dist/vex.combined.js",
-    "dist/vex.min.js",
-    "dist/vex.dialog.min.js",
-    "dist/vex.combined.min.js",
+    "dist/vex2.js",
+    "dist/vex2.min.js",
     "css/vex.css",
     "css/vex-theme-bottom-right-corner.css",
     "css/vex-theme-default.css",
@@ -39,8 +35,7 @@
     "bower_components",
     "docs",
     ".gitignore",
-    ".hsdoc",
-    "Gruntfile.coffee",
+    "Gruntfile.js",
     "component.json",
     "package.json"
   ]

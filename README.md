@@ -1,4 +1,4 @@
-## vex-nojquery
+## vex2
 
 ### [Demo](http://github.hubspot.com/vex/docs/welcome/) &nbsp;&nbsp; [Documentation](http://github.hubspot.com/vex/)
 

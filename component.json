@@ -1,9 +1,9 @@
 {
-  "name": "vex-no-jquery",
-  "repo": "bbatliner/vex",
-  "description": "Beautiful, functional, dialogs in vanilla JavaScript",
-  "version": "3.0.0",
-  "homepage": "http://github.hubspot.com/vex",
+  "name": "vex2",
+  "repo": "bbatliner/vex2",
+  "description": "Beautiful, functional dialogs in vanilla JavaScript",
+  "version": "1.0.0",
+  "homepage": "https://github.com/bbatliner/vex2",
   "license": "MIT",
   "keywords": [
     "client-side",
@@ -12,12 +12,8 @@
     "modal"
   ],
   "scripts": [
-    "dist/vex.js",
-    "dist/vex.dialog.js",
-    "dist/vex.combined.js",
-    "dist/vex.min.js",
-    "dist/vex.dialog.min.js",
-    "dist/vex.combined.min.js"
+    "dist/vex2.js",
+    "dist/vex2.min.js"
   ],
   "styles": [
     "css/vex.css",

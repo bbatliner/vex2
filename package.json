@@ -11,17 +11,20 @@
   },
   "dependencies": {
     "domify": "latest",
-    "form-serialize": "latest",
     "is-dom": "latest"
   },
   "devDependencies": {
     "grunt": "latest",
     "grunt-browserify": "latest",
-    "grunt-cli": "latest",
     "grunt-contrib-compass": "latest",
     "grunt-contrib-uglify": "latest",
-    "grunt-contrib-watch": "latest",
     "grunt-sass": "latest",
     "standard": "latest"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "standard": {
+    "ignore": ["/dist"]
   }
 }

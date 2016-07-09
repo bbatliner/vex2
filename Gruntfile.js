@@ -4,8 +4,8 @@ module.exports = function (grunt) {
 
     browserify: {
       Vex: {
-        src: 'src/vex.js',
-        dest: 'dist/vex.js',
+        src: 'src/vex2.js',
+        dest: 'dist/vex2.js',
         options: {
           browserifyOptions: {
             'standalone': 'Vex'
@@ -16,10 +16,11 @@ module.exports = function (grunt) {
 
     uglify: {
       Vex: {
-        src: 'dist/vex.js',
-        dest: 'dist/vex.min.js',
+        src: 'dist/vex2.js',
+        dest: 'dist/vex2.min.js',
         options: {
-          banner: '/*! vex.js <%= pkg.version %> */\n'
+          banner: '/*! vex2.js <%= pkg.version %> */\n',
+          report: 'gzip'
         }
       }
     },
@@ -45,7 +46,6 @@ module.exports = function (grunt) {
     }
   })
 
-  grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-browserify')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-compass')
