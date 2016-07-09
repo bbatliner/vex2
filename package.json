@@ -9,10 +9,6 @@
     "type": "git",
     "url": "https://github.com/bbatliner/vex2"
   },
-  "dependencies": {
-    "domify": "latest",
-    "is-dom": "latest"
-  },
   "devDependencies": {
     "grunt": "latest",
     "grunt-browserify": "latest",

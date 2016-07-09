@@ -1,4 +1,4 @@
-## vex-nojquery
+## vex2
 
 Dialogs for the 21st century.
 
@@ -6,13 +6,13 @@ Dialogs for the 21st century.
 
 ### Take control of your dialogs
 
-Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`10.2kb` minified, `3.8kb` minified + gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
+Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`4kb` minified, `1.6kb` minified + gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
 
 #### Features
 
 - Drop-in replacement for `alert`, `confirm`, and `prompt`
 - Easilly configurable animations which are smooth as butter
-- Tiny footprint
+- Tiny footprint and zero dependencies
 - Looks and behaves great on mobile devices
 - (TODO) Open multiple dialogs at once and close them individually or all at once
 - (TODO) Built in CSS spinner for asynchronous dialogs
@@ -78,12 +78,8 @@ defaultOptions = {
   overlayClosesOnClick: true,
   appendLocation: 'body',
   className: '',
-  css: {},
   overlayClassName: '',
-  overlayCSS: {},
   contentClassName: '',
-  contentCSS: {},
-  closeClassName: '',
-  closeCSS: {}
+  closeClassName: ''
 }
 ```

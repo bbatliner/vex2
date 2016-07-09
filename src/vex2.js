@@ -1,7 +1,3 @@
-// Small deps for string to HTML conversion
-var domify = require('domify')
-var isDom = require('is-dom')
-
 // Object.assign polyfill
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 if (typeof Object.assign !== 'function') {
@@ -125,7 +121,7 @@ var Vex = function () {
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
-    contentEl.appendChild(isDom(options.content) ? options.content : domify(options.content))
+    contentEl.appendChild(options.content)
     rootEl.appendChild(contentEl)
 
     // Close button
