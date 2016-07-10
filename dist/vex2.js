@@ -23,31 +23,6 @@ if (typeof Object.assign !== 'function') {
   }
 }
 
-// Object.create polyfill
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
-if (typeof Object.create !== 'function') {
-  Object.create = (function () {
-    var Temp = function () {}
-    return function (prototype, propertiesObject) {
-      if (prototype !== Object(prototype) && prototype !== null) {
-        throw TypeError('Argument must be an object, or null')
-      }
-      Temp.prototype = prototype || {}
-      if (propertiesObject !== undefined) {
-        Object.defineProperties(Temp.prototype, propertiesObject)
-      }
-      var result = new Temp()
-      Temp.prototype = null
-      // to imitate the case of Object.create(null)
-      if (prototype === null) {
-        // eslint-disable-next-line
-        result.__proto__ = null
-      }
-      return result
-    }
-  })()
-}
-
 // Detect CSS Animation End Support
 // https://github.com/limonte/sweetalert2/blob/99bd539f85e15ac170f69d35001d12e092ef0054/src/utils/dom.js#L194
 var animationEndEvent = (function () {
@@ -77,11 +52,31 @@ var baseClassNames = {
   open: 'vex-open'
 }
 
+// Basic string to DOM function
+var stringToDom = function (str) {
+  var testEl = document.createElement('div')
+  testEl.innerHTML = str
+  if (testEl.childElementCount === 0) {
+    return document.createTextNode(str)
+  }
+  if (testEl.childElementCount === 1) {
+    return testEl.firstElementChild
+  }
+  var frag = document.createDocumentFragment()
+  // Appending the element from testEl will remove it from testEl.children,
+  // so we store the initial length of children and then always append the first child
+  for (var i = 0, len = testEl.children.length; i < len; i++) {
+    frag.appendChild(testEl.children[0])
+  }
+  return frag
+}
+
 // Vex factory function
 var Vex = function () {
   // Vex object
   var vex = {}
 
+  // TODO ESC key closes all vex dialogs
   // Register global handler for ESC
   var escHandler = function (e) {
     if (e.keyCode === 27) {
@@ -96,16 +91,16 @@ var Vex = function () {
 
     // Vex
     var rootEl = this.rootEl = document.createElement('div')
-    rootEl.classList.add(baseClassNames.vex)
+    rootEl.classList = baseClassNames.vex
     if (options.className) {
-      rootEl.classList = options.className
+      rootEl.classList.add(options.className)
     }
 
     // Overlay
     var overlayEl = this.overlayEl = document.createElement('div')
     overlayEl.classList = baseClassNames.overlay
     if (options.overlayClassName) {
-      overlayEl.classList = options.overlayClassName
+      overlayEl.classList.add(options.overlayClassName)
     }
     if (options.overlayClosesOnClick) {
       overlayEl.addEventListener('click', function (e) {
@@ -118,17 +113,17 @@ var Vex = function () {
 
     // Content
     var contentEl = this.contentEl = document.createElement('div')
-    contentEl.classList.add(baseClassNames.content)
+    contentEl.classList = baseClassNames.content
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
-    contentEl.appendChild(options.content)
+    contentEl.appendChild(options.content instanceof Node ? options.content : stringToDom(options.content))
     rootEl.appendChild(contentEl)
 
     // Close button
     if (options.showCloseButton) {
       var closeEl = this.closeEl = document.createElement('div')
-      closeEl.classList.add(baseClassNames.close)
+      closeEl.classList = baseClassNames.close
       if (options.closeClassName) {
         closeEl.classList.add(options.closeClassName)
       }
@@ -164,7 +159,12 @@ var Vex = function () {
       return true
     }.bind(this)
 
-    var close = function () {
+    var close = function (e) {
+      if (!this.rootEl.parentNode) {
+        return
+      }
+      // Run once
+      this.rootEl.removeEventListener(animationEndEvent, close)
       // Remove the dialog from the DOM
       this.rootEl.parentNode.removeChild(this.rootEl)
       // Remove styling from the body during the next tick
@@ -227,8 +227,8 @@ Vex.registerPlugin = function (plugin, name) {
   if (Vex[pluginName]) {
     throw new Error('Plugin ' + name + ' is already registered.')
   }
-  var proto = Vex()
   Vex[pluginName] = function () {
+    var proto = Vex()
     return Object.assign(Object.create(proto), plugin(proto))
   }
   for (var prop in plugin) {
