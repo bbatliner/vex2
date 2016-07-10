@@ -1,72 +1,33 @@
-## vex2
+## Getting started guide
 
-Dialogs for the 21st century.
+### Installation
 
-### [Demo](http://github.hubspot.com/vex/docs/welcome/) — [Documentation](http://github.hubspot.com/vex/)
+vex2 is available on npm and bower.
 
-### Take control of your dialogs
-
-Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`4.1kb` minified, `1.6kb` minified + gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
-
-#### Features
-
-- Drop-in replacement for `alert`, `confirm`, and `prompt`
-- Easilly configurable animations which are smooth as butter
-- Tiny footprint and zero dependencies
-- Looks and behaves great on mobile devices
-- (TODO) Open multiple dialogs at once and close them individually or all at once
-- (TODO) Built in CSS spinner for asynchronous dialogs
-
-#### Documentation
-
-- [Documentation Home](http://github.hubspot.com/vex/).
-- [Vex Documentation](http://github.hubspot.com/vex/api/vex/).
-- [Vex Dialog Documentation](http://github.hubspot.com/vex/api/vex_dialog/).
-
-### How To Use Vex
-
-#### Basics of Opening and Passing Content
-
-Create a Vex object by calling `Vex()`.
-
-```javascript
-var dialog = Vex()
+```
+npm install vex2
+bower install vex2
 ```
 
-To open a dialog, call `Vex().open`.
+You can optionally [download](https://github.com/bbatliner/vex2/releases/v1.0.0) the project files.
+
+### Basics of creating dialogs and passing content
+
+Open a vex by calling `vex.open`.
 
 ```javascript
-dialog.open({
-    content: 'Hello, World!'
-})
+var dialog = vex.open('Hello, world!')
 ```
 
-The user can close the dialog manually, or you can call `Vex().close`.
+The user can close the dialog manually, or you can call `.close`.
 
 ```javascript
 dialog.close()
 ```
 
-Read more about Vex in the [API docs](http://github.hubspot.com/vex/api/vex/).
+### Options
 
-#### Vex Dialog
-
-Included by default, Vex Dialog is a plugin for Vex that contains dropin replacements for `alert`, `confirm`, and `prompt`.
-
-### API
-
-Vex Dialog exposes four main methods:
-
-- `Vex.Dialog().alert(stringOrOptions)`
-- `Vex.Dialog().confirm(options)`
-- `Vex.Dialog().prompt(options)`
-- `Vex.Dialog().open(options)`
-
-Read more about Vex Dialog in the [API docs](http://github.hubspot.com/vex/api/vex_dialog/).
-
-#### Options
-
-When calling `Vex().open` you can pass a number of options to handle styling and certain behaviors.
+When calling `vex.open` you can pass a number of options to handle styling and certain behaviors.
 
 Here are the defaults:
 
@@ -83,3 +44,34 @@ defaultOptions = {
   closeClassName: ''
 }
 ```
+
+To learn more, see the [API docs](/docs/intro.md).
+
+### Plugins
+
+vex2 plugins are a great way to extend the functionality of vex while keeping your dependencies lightweight.
+For these examples, we'll be using [vex2-dialog](https://github.com/bbatliner/vex2-dialog), a plugin for vex2 that contains dropin replacements for `alert`, `confirm`, and `prompt`.
+
+#### Installing plugins
+
+Plugins can be published individually to package managers such as npm or bower, or included locally. For vex2-dialog, we'll use npm.
+
+```
+npm install vex2-dialog
+```
+
+#### Registering plugins
+
+All plugins must be registered with the main vex2 module.
+
+```javascript
+var vex = require('vex2') // or window.vex, if included via script tag
+vex.registerPlugin(require('vex2-dialog')) // or window.vexDialog, if included via script tag
+
+// The plugin is registered under the vex namespace.
+vex.dialog.alert('I was made by a plugin!')
+```
+
+#### Writing your own plugins
+
+For more info on plugins, see [Plugins](/PLUGINS.md).
