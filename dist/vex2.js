@@ -117,7 +117,7 @@ var Vex = function () {
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
-    contentEl.appendChild(options.content instanceof Node ? options.content : stringToDom(options.content))
+    contentEl.appendChild(options.content instanceof window.Node ? options.content : stringToDom(options.content))
     rootEl.appendChild(contentEl)
 
     // Close button
@@ -159,7 +159,7 @@ var Vex = function () {
       return true
     }.bind(this)
 
-    var close = function (e) {
+    var close = function () {
       if (!this.rootEl.parentNode) {
         return
       }
