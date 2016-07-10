@@ -1,6 +1,6 @@
 {
   "name": "vex2",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Beautiful, functional dialogs in vanilla JavaScript",
   "author": "Brendan Batliner <brendan@omnipointment.com>",
   "license": "MIT",
