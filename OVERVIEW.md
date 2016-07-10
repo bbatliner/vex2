@@ -2,14 +2,13 @@
 
 ### Installation
 
-vex2 is available on npm and bower.
+vex2 is available on npm.
 
 ```
-npm install vex2
-bower install vex2
+npm install --save vex2
 ```
 
-You can optionally [download](https://github.com/bbatliner/vex2/releases/v1.0.0) the project files.
+You can optionally [download](https://github.com/bbatliner/vex2/releases/v2.0.1) the project files.
 
 ### Basics of creating dialogs and passing content
 
