@@ -36,7 +36,6 @@
     "docs",
     ".gitignore",
     "Gruntfile.js",
-    "component.json",
     "package.json"
   ]
 }
