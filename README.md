@@ -14,3 +14,4 @@ vex2 is a fork of the original [vex repository](https://github.com/HubSpot/vex) 
 #### Documentation
 - [Getting started](/OVERVIEW.md)
 - [API Docs](/docs/intro.md)
+- [Plugins](/PLUGINS.md)
