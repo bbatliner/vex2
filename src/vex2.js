@@ -269,13 +269,13 @@ vex.defaultOptions = {
 // TODO Loading symbols?
 
 vex.registerPlugin = function (plugin, name) {
-  var pluginName = name || plugin.name
+  var pluginName = name || plugin.pluginName || plugin.name
   if (vex[pluginName]) {
     throw new Error('Plugin ' + name + ' is already registered.')
   }
   vex[pluginName] = plugin(vex)
   for (var prop in plugin) {
-    if (plugin.hasOwnProperty(prop) && prop !== 'name') {
+    if (plugin.hasOwnProperty(prop) && prop !== 'pluginName' && prop !== 'name') {
       vex[pluginName][prop] = plugin[prop]
     }
   }
