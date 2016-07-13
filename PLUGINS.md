@@ -11,20 +11,20 @@ For example, here is a basic plugin that will log a message every time a vex is 
 ```javascript
 var myFirstPlugin = function (vex) {
     return {
-        open: function (options) {
+        name : 'helloWorld',
+        open : function (options) {
             console.log('you opened a vex with a plugin!')
             return vex.open(options)
         }
     }
 }
 
-myFirstPlugin.name = 'myFirstPlugin'
 ```
 
 Then, register your plugin with vex:
 
 ```javascript
 vex.registerPlugin(myFirstPlugin)
-vex.myFirstPlugin.open('Hello!') // logs 'you opened a vex with a plugin!'
+vex.helloWorld.open('Hello!') // logs 'you opened a vex with a plugin!'
 // also opens a vex!
 ```
