@@ -4,6 +4,13 @@ vex is a modern dialog library which is highly configurable, easily stylable, an
 
 vex2 is a fork of the original [vex repository](https://github.com/HubSpot/vex) that is smaller in size, more modular, and has zero dependencies.
 
+#### Browser support
+- IE9+ (untested)
+- Firefox 47+ (need to determine earliest supported version)
+- Chrome 51+ (need to determine earliest supported version)
+- Safari (untested)
+- Opera 38+ (need to determine earliest supported version)
+
 #### Features
 - Tiny footprint and zero dependencies
 - Looks and behaves great on mobile devices
