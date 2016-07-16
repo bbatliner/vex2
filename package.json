@@ -24,5 +24,8 @@
     "ignore": [
       "/dist"
     ]
+  },
+  "dependencies": {
+    "domify": "^1.4.0"
   }
 }

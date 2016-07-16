@@ -51,24 +51,8 @@ var baseClassNames = {
   open: 'vex-open'
 }
 
-// Basic string to DOM function
-var stringToDom = function (str) {
-  var testEl = document.createElement('div')
-  testEl.innerHTML = str
-  if (testEl.childElementCount === 0) {
-    return document.createTextNode(str)
-  }
-  if (testEl.childElementCount === 1) {
-    return testEl.firstElementChild
-  }
-  var frag = document.createDocumentFragment()
-  // Appending the element from testEl will remove it from testEl.children,
-  // so we store the initial length of children and then always append the first child
-  for (var i = 0, len = testEl.children.length; i < len; i++) {
-    frag.appendChild(testEl.children[0])
-  }
-  return frag
-}
+// String to DOM function
+var domify = require('domify')
 
 var vexes = {}
 var globalId = 1
@@ -196,7 +180,7 @@ var vex = {
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
-    contentEl.appendChild(options.content instanceof window.Node ? options.content : stringToDom(options.content))
+    contentEl.appendChild(options.content instanceof window.Node ? options.content : domify(options.content))
     rootEl.appendChild(contentEl)
 
     // Close button
