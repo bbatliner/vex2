@@ -1,4 +1,118 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.vex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+/**
+ * Expose `parse`.
+ */
+
+module.exports = parse;
+
+/**
+ * Tests for browser support.
+ */
+
+var innerHTMLBug = false;
+var bugTestDiv;
+if (typeof document !== 'undefined') {
+  bugTestDiv = document.createElement('div');
+  // Setup
+  bugTestDiv.innerHTML = '  <link/><table></table><a href="/a">a</a><input type="checkbox"/>';
+  // Make sure that link elements get serialized correctly by innerHTML
+  // This requires a wrapper element in IE
+  innerHTMLBug = !bugTestDiv.getElementsByTagName('link').length;
+  bugTestDiv = undefined;
+}
+
+/**
+ * Wrap map from jquery.
+ */
+
+var map = {
+  legend: [1, '<fieldset>', '</fieldset>'],
+  tr: [2, '<table><tbody>', '</tbody></table>'],
+  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
+  // for script/link/style tags to work in IE6-8, you have to wrap
+  // in a div with a non-whitespace character in front, ha!
+  _default: innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', '']
+};
+
+map.td =
+map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];
+
+map.option =
+map.optgroup = [1, '<select multiple="multiple">', '</select>'];
+
+map.thead =
+map.tbody =
+map.colgroup =
+map.caption =
+map.tfoot = [1, '<table>', '</table>'];
+
+map.polyline =
+map.ellipse =
+map.polygon =
+map.circle =
+map.text =
+map.line =
+map.path =
+map.rect =
+map.g = [1, '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">','</svg>'];
+
+/**
+ * Parse `html` and return a DOM Node instance, which could be a TextNode,
+ * HTML DOM Node of some kind (<div> for example), or a DocumentFragment
+ * instance, depending on the contents of the `html` string.
+ *
+ * @param {String} html - HTML string to "domify"
+ * @param {Document} doc - The `document` instance to create the Node for
+ * @return {DOMNode} the TextNode, DOM Node, or DocumentFragment instance
+ * @api private
+ */
+
+function parse(html, doc) {
+  if ('string' != typeof html) throw new TypeError('String expected');
+
+  // default to the global `document` object
+  if (!doc) doc = document;
+
+  // tag name
+  var m = /<([\w:]+)/.exec(html);
+  if (!m) return doc.createTextNode(html);
+
+  html = html.replace(/^\s+|\s+$/g, ''); // Remove leading/trailing whitespace
+
+  var tag = m[1];
+
+  // body support
+  if (tag == 'body') {
+    var el = doc.createElement('html');
+    el.innerHTML = html;
+    return el.removeChild(el.lastChild);
+  }
+
+  // wrap map
+  var wrap = map[tag] || map._default;
+  var depth = wrap[0];
+  var prefix = wrap[1];
+  var suffix = wrap[2];
+  var el = doc.createElement('div');
+  el.innerHTML = prefix + html + suffix;
+  while (depth--) el = el.lastChild;
+
+  // one element
+  if (el.firstChild == el.lastChild) {
+    return el.removeChild(el.firstChild);
+  }
+
+  // several elements
+  var fragment = doc.createDocumentFragment();
+  while (el.firstChild) {
+    fragment.appendChild(el.removeChild(el.firstChild));
+  }
+
+  return fragment;
+}
+
+},{}],2:[function(require,module,exports){
 // Object.assign polyfill
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 if (typeof Object.assign !== 'function') {
@@ -52,31 +166,17 @@ var baseClassNames = {
   open: 'vex-open'
 }
 
-// Basic string to DOM function
-var stringToDom = function (str) {
-  var testEl = document.createElement('div')
-  testEl.innerHTML = str
-  if (testEl.childElementCount === 0) {
-    return document.createTextNode(str)
-  }
-  if (testEl.childElementCount === 1) {
-    return testEl.firstElementChild
-  }
-  var frag = document.createDocumentFragment()
-  // Appending the element from testEl will remove it from testEl.children,
-  // so we store the initial length of children and then always append the first child
-  for (var i = 0, len = testEl.children.length; i < len; i++) {
-    frag.appendChild(testEl.children[0])
-  }
-  return frag
-}
+// String to DOM function
+var domify = require('domify')
 
+// Private lookup table of all open vex objects, keyed by id
 var vexes = {}
 var globalId = 1
 
+// vex itself is an object that exposes a simple API to open and close vex objects in various ways
 var vex = {
   open: function (opts) {
-    // vex object
+    // The dialog instance
     var vexInstance = {}
 
     // Set id
@@ -88,14 +188,8 @@ var vex = {
     // Set state
     vexInstance.isOpen = true
 
-    // Function to handle escape keypress
-    var escHandler = function (e) {
-      if (e.keyCode === 27) {
-        vexInstance.close()
-      }
-    }
-
-    // Close function on the vex object
+    // Close function on the vex instance
+    // This is how all API functions should close individual vexes
     vexInstance.close = function () {
       // Check state
       if (!this.isOpen) {
@@ -105,9 +199,11 @@ var vex = {
       var options = this.options
 
       var beforeClose = function () {
+        // Call before close callback
         if (options.beforeClose) {
           return options.beforeClose.call(this)
         }
+        // Otherwise indicate that it's ok to continue with close
         return true
       }.bind(this)
 
@@ -119,16 +215,17 @@ var vex = {
         this.rootEl.removeEventListener(animationEndEvent, close)
         // Remove the dialog from the DOM
         this.rootEl.parentNode.removeChild(this.rootEl)
-        // Remove styling from the body during the next tick
-        setTimeout(function () {
-          document.body.classList.remove(baseClassNames.open)
-        }, 0)
         // Call after close callback
         if (options.afterClose) {
           options.afterClose.call(this)
         }
+        // Remove styling from the body, if no more vexes are open
+        if (Object.keys(vexes).length === 0) {
+          document.body.classList.remove(baseClassNames.open)
+        }
       }.bind(this)
 
+      // If any user-defined validation or anything fails, abort the close
       if (beforeClose() === false) {
         return false
       }
@@ -136,7 +233,7 @@ var vex = {
       // Update state
       this.isOpen = false
 
-      // Detect animation support
+      // Detect if the content el has any CSS animations defined
       var style = window.getComputedStyle(this.contentEl)
       function hasAnimationPre (prefix) {
         return style.getPropertyValue(prefix + 'animation-name') !== 'none' && style.getPropertyValue(prefix + 'animation-duration') !== '0s'
@@ -145,21 +242,19 @@ var vex = {
 
       // Close the vex
       if (animationEndEvent && hasAnimation) {
+        // Setup the end event listener, to remove the el from the DOM
         this.rootEl.addEventListener(animationEndEvent, close)
+        // Add the closing class to the dialog, showing the close animation
         this.rootEl.classList.add(baseClassNames.closing)
       } else {
         close()
       }
 
-      // Cleanup global handler for ESC
-      window.removeEventListener('keyup', escHandler)
+      // Remove from lookup table (prevent memory leaks)
+      delete vexes[this.id]
 
       return true
     }
-
-    // TODO ESC key closes all vex dialogs
-    // Register global handler for ESC
-    window.addEventListener('keyup', escHandler)
 
     // Allow strings as content
     if (typeof opts === 'string') {
@@ -167,9 +262,10 @@ var vex = {
         content: opts
       }
     }
+    // Store options on instance for future reference
     var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
 
-    // vex
+    // vex root
     var rootEl = vexInstance.rootEl = document.createElement('div')
     rootEl.classList = baseClassNames.vex
     if (options.className) {
@@ -197,7 +293,7 @@ var vex = {
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
-    contentEl.appendChild(options.content instanceof window.Node ? options.content : stringToDom(options.content))
+    contentEl.appendChild(options.content instanceof window.Node ? options.content : domify(options.content))
     rootEl.appendChild(contentEl)
 
     // Close button
@@ -211,7 +307,7 @@ var vex = {
       contentEl.appendChild(closeEl)
     }
 
-    // Inject DOM
+    // Add to DOM
     document.querySelector(options.appendLocation).appendChild(rootEl)
 
     // Call after open callback
@@ -219,14 +315,14 @@ var vex = {
       options.afterOpen.call(vexInstance)
     }
 
-    // Apply styling to the body during the next tick
-    setTimeout(function () {
-      document.body.classList.add(baseClassNames.open)
-    }, 0)
+    // Apply styling to the body
+    document.body.classList.add(baseClassNames.open)
 
+    // Return the created vex instance
     return vexInstance
   },
 
+  // A top-level vex.close function to close dialogs by reference or id
   close: function (vexOrId) {
     var id
     if (vexOrId.id) {
@@ -236,9 +332,22 @@ var vex = {
     } else {
       throw new TypeError('close requires a vex object or id string')
     }
+    if (!vexes[id]) {
+      return false
+    }
     return vexes[id].close()
   },
 
+  // Close the most recently created/opened vex
+  closeTop: function () {
+    var ids = Object.keys(vexes)
+    if (!ids.length) {
+      return false
+    }
+    return vexes[ids[ids.length - 1]].close()
+  },
+
+  // Close every vex!
   closeAll: function () {
     for (var id in vexes) {
       this.close(id)
@@ -246,14 +355,25 @@ var vex = {
     return true
   },
 
+  // A getter for the internal lookup table
   getAll: function () {
     return vexes
   },
 
+  // A getter for the internal lookup table
   getById: function (id) {
     return vexes[id]
   }
 }
+
+// Close top vex on escape
+window.addEventListener('keyup', function (e) {
+  if (e.keyCode === 27) {
+    vex.closeTop()
+  }
+})
+// Close all vexes on history pop state (useful in single page apps)
+window.addEventListener('popstate', vex.closeAll)
 
 vex.defaultOptions = {
   content: '',
@@ -269,6 +389,7 @@ vex.defaultOptions = {
 
 // TODO Loading symbols?
 
+// Plugin system!
 vex.registerPlugin = function (plugin, name) {
   var pluginName = name || plugin.pluginName || plugin.name
   if (vex[pluginName]) {
@@ -284,5 +405,5 @@ vex.registerPlugin = function (plugin, name) {
 
 module.exports = vex
 
-},{}]},{},[1])(1)
+},{"domify":1}]},{},[2])(2)
 });

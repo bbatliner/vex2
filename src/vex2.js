@@ -73,13 +73,6 @@ var vex = {
     // Set state
     vexInstance.isOpen = true
 
-    // Function to handle escape keypress
-    var escHandler = function (e) {
-      if (e.keyCode === 27) {
-        vexInstance.close()
-      }
-    }
-
     // Close function on the vex instance
     // This is how all API functions should close individual vexes
     vexInstance.close = function () {
@@ -142,18 +135,11 @@ var vex = {
         close()
       }
 
-      // Cleanup global handler for ESC
-      window.removeEventListener('keyup', escHandler)
-      
       // Remove from lookup table (prevent memory leaks)
       delete vexes[this.id]
 
       return true
     }
-
-    // TODO ESC key closes all vex dialogs
-    // Register global handler for ESC
-    window.addEventListener('keyup', escHandler)
 
     // Allow strings as content
     if (typeof opts === 'string') {
@@ -231,7 +217,19 @@ var vex = {
     } else {
       throw new TypeError('close requires a vex object or id string')
     }
+    if (!vexes[id]) {
+      return false
+    }
     return vexes[id].close()
+  },
+
+  // Close the most recently created/opened vex
+  closeTop: function () {
+    var ids = Object.keys(vexes)
+    if (!ids.length) {
+      return false
+    }
+    return vexes[ids[ids.length - 1]].close()
   },
 
   // Close every vex!
@@ -252,6 +250,15 @@ var vex = {
     return vexes[id]
   }
 }
+
+// Close top vex on escape
+window.addEventListener('keyup', function (e) {
+  if (e.keyCode === 27) {
+    vex.closeTop()
+  }
+})
+// Close all vexes on history pop state (useful in single page apps)
+window.addEventListener('popstate', vex.closeAll)
 
 vex.defaultOptions = {
   content: '',
