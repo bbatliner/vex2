@@ -2,7 +2,7 @@
 
 ### Take control of your dialogs
 
-Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`3.2kb` minified and gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
+Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`5.1kb` minified and gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
 
 #### Features
 
@@ -20,6 +20,9 @@ Vex is a modern dialog library which is highly configurable, easily stylable, an
 
 #### Browser Support
 
+Vex will run in any ES5-compatible environment, and includes polyfills for `classList` and `Object.assign`.
+
+This means the following browsers are compatible with Vex:
 - IE 9+
 - Firefox 21+
 - Chrome 23+
