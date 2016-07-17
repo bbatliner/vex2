@@ -275,17 +275,13 @@ vex.defaultOptions = {
 // TODO Loading symbols?
 
 // Plugin system!
-vex.registerPlugin = function (plugin, name) {
-  var pluginName = name || plugin.pluginName || plugin.name
+vex.registerPlugin = function (pluginFn, name) {
+  var plugin = pluginFn(vex)
+  var pluginName = name || plugin.name
   if (vex[pluginName]) {
     throw new Error('Plugin ' + name + ' is already registered.')
   }
-  vex[pluginName] = plugin(vex)
-  for (var prop in plugin) {
-    if (plugin.hasOwnProperty(prop) && prop !== 'pluginName' && prop !== 'name') {
-      vex[pluginName][prop] = plugin[prop]
-    }
-  }
+  vex[pluginName] = plugin
 }
 
 module.exports = vex
