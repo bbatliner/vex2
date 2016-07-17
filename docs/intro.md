@@ -1,8 +1,8 @@
-## Vex
+## vex
 
 ### Take control of your dialogs
 
-Vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`5.1kb` minified and gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
+vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`5.1kb` minified and gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
 
 #### Features
 
@@ -20,9 +20,9 @@ Vex is a modern dialog library which is highly configurable, easily stylable, an
 
 #### Browser Support
 
-Vex will run in any ES5-compatible environment, and includes polyfills for `classList` and `Object.assign`.
+vex will run in any ES5-compatible environment, and includes polyfills for `classList` and `Object.assign`.
 
-This means the following browsers are compatible with Vex:
+This means the following browsers are compatible with vex:
 - IE 9+
 - Firefox 21+
 - Chrome 23+
@@ -31,7 +31,7 @@ This means the following browsers are compatible with Vex:
 
 #### Including in your project
 
-For the most common usage of Vex, you'll want to include vex, vex-dialog, the vex CSS file, and a theme file.
+For the most common usage of vex, you'll want to include vex, vex-dialog, the vex CSS file, and a theme file.
 
 For HTML includes:
 
@@ -55,7 +55,7 @@ vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
 ```
 
-That will give you all of the APIs for both Vex and Vex Dialog, and set you up with the "Operating System" theme. If you'd prefer another theme, check out [Themes](/vex/api/themes).
+That will give you all of the APIs for both vex and vex-dialog, and set you up with the "Operating System" theme. If you'd prefer another theme, check out [Themes](/vex/api/themes).
 
 The `vex.combined.min.js` file includes:
 - `vex.dialog.js` which adds the functionality that mimics the native browser alert, confirm, and prompt (everything you see in the [Basic docs](/vex/api/basic) examples).
@@ -68,7 +68,7 @@ The `vex.combined.min.js` file includes:
 
 #### Confirm Demo
 
-One of the simplest ways to use Vex is to call `vex.dialog.alert`, `vex.dialog.confirm`, or `vex.dialog.prompt`. In this demo, we're using `vex.dialog.confirm` to ask the user to confirm the answer to a simple question.
+One of the simplest ways to use vex is to call `vex.dialog.alert`, `vex.dialog.confirm`, or `vex.dialog.prompt`. In this demo, we're using `vex.dialog.confirm` to ask the user to confirm the answer to a simple question.
 
 <a class="demo-confirm hs-brand-button">Destroy the planet</a>
 <div class="demo-result-confirm hs-doc-callout hs-doc-callout-info" style="display: none"></div>
@@ -154,7 +154,7 @@ vex.dialog.open({
 
 #### Learn More
 
-To learn more about how to use Vex, visit our API pages.
+To learn more about how to use vex, visit our API pages.
 
 - [Basic](http://github.hubspot.com/vex/api/basic)
 - [Themes](http://github.hubspot.com/vex/api/themes)
@@ -162,7 +162,7 @@ To learn more about how to use Vex, visit our API pages.
 
 #### Credits
 
-Vex was built by [Adam Schwartz](http://twitter.com/adamfschwartz)
+vex was built by [Adam Schwartz](http://twitter.com/adamfschwartz)
 
 
 <!-- Resources for the demos -->

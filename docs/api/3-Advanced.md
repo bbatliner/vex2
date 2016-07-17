@@ -94,7 +94,7 @@ defaultOptions: {
 
 ### Note about Includes
 
-To use Vex, minimally, you must include:
+To use vex, minimally, you must include:
 
 ```html
 <script src="vex.js"></script>

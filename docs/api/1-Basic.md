@@ -2,7 +2,7 @@
 
 ### Dialog API
 
-Vex Dialog exposes 4 main apis:
+vex-dialog exposes 4 main apis:
 
 - `vex.dialog.alert(stringOrOptions)`
 - `vex.dialog.confirm(options)`
@@ -18,14 +18,14 @@ Use alerts when you want to display a message to the user, but you don't want to
 <a class="demo-alert hs-brand-button">Open an alert</a>
 <script>
 $('.demo-alert').click(function(){
-    vex.dialog.alert('Thanks for checking out Vex!');
+    vex.dialog.alert('Thanks for checking out vex!');
 });
 </script>
 
 Play with this demo:
 
 ```javascript
-vex.dialog.alert('Thanks for checking out Vex!')
+vex.dialog.alert('Thanks for checking out vex!')
 ```
 
 #### Confirm
