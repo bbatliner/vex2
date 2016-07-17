@@ -1,8 +1,12 @@
+// String to DOM function
+var domify = require('domify')
+// classList polyfill for old versions of IE/Firefox
+require('classlist-polyfill')
+
 // Object.assign polyfill
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 if (typeof Object.assign !== 'function') {
   Object.assign = function (target) {
-    'use strict'
     if (target == null) {
       throw new TypeError('Cannot convert undefined or null to object')
     }
@@ -50,9 +54,6 @@ var baseClassNames = {
   closing: 'vex-closing',
   open: 'vex-open'
 }
-
-// String to DOM function
-var domify = require('domify')
 
 // Private lookup table of all open vex objects, keyed by id
 var vexes = {}
@@ -148,7 +149,7 @@ var vex = {
       }
     }
     // Store options on instance for future reference
-    var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
+    var options = vexInstance.options = assign({}, vex.defaultOptions, opts)
 
     // vex root
     var rootEl = vexInstance.rootEl = document.createElement('div')
