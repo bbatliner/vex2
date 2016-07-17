@@ -99,6 +99,8 @@ var vex = {
         }
         // Run once
         this.rootEl.removeEventListener(animationEndEvent, close)
+        // Remove from lookup table (prevent memory leaks)
+        delete vexes[this.id]
         // Remove the dialog from the DOM
         this.rootEl.parentNode.removeChild(this.rootEl)
         // Call after close callback
@@ -135,9 +137,6 @@ var vex = {
       } else {
         close()
       }
-
-      // Remove from lookup table (prevent memory leaks)
-      delete vexes[this.id]
 
       return true
     }
