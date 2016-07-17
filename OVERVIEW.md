@@ -56,7 +56,7 @@ For these examples, we'll be using [vex2-dialog](https://github.com/bbatliner/ve
 Plugins can be published individually to package managers such as npm or bower, or included locally. For vex2-dialog, we'll use npm.
 
 ```
-npm install vex2-dialog
+npm install --save vex2-dialog
 ```
 
 #### Registering plugins
