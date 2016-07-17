@@ -1,18 +1,22 @@
 ## vex2
 
-vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`4.3kb` minified, `1.7kb` minified + gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
+vex is a modern dialog library which is highly configurable, easily stylable, and gets out of the way. You'll love vex because it's tiny (`7.9kb` minified, `3.2kb` minified + gzipped), has a clear and simple API, works on mobile devices, and can be customized to match your style in seconds.
 
-vex2 is a fork of the original [vex repository](https://github.com/HubSpot/vex) that is smaller in size, more modular, and has zero dependencies.
+vex2 is a fork of the original [vex repository](https://github.com/HubSpot/vex) that is smaller in size, more modular, and has zero external dependencies.
 
 #### Browser support
-- IE9+ (untested)
-- Firefox 47+ (need to determine earliest supported version)
-- Chrome 51+ (need to determine earliest supported version)
-- Safari (untested)
-- Opera 38+ (need to determine earliest supported version)
+
+vex2 will run in any ES5-compatible environment, and includes polyfills for `classList` and `Object.assign`.
+
+This means the following browsers should work:
+- IE 9+
+- Firefox 21+
+- Chrome 23+
+- Safari 6+
+- Opera 15+
 
 #### Features
-- Tiny footprint and zero dependencies
+- Tiny footprint and zero external dependencies
 - Looks and behaves great on mobile devices
 - Easily configurable animations which are smooth as butter
 - Open multiple dialogs and close them individually or all at once

@@ -18,7 +18,7 @@ var myFirstPlugin = function (vex) {
     }
 }
 
-myFirstPlugin.name = 'myFirstPlugin'
+myFirstPlugin.pluginName = 'myFirstPlugin'
 ```
 
 Then, register your plugin with vex:

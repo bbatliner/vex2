@@ -1,6 +1,6 @@
 // String to DOM function
 var domify = require('domify')
-// classList polyfill for old versions of IE/Firefox
+// classList polyfill for old browsers
 require('classlist-polyfill')
 
 // Object.assign polyfill

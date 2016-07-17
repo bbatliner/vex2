@@ -356,34 +356,33 @@ function parse(html, doc) {
 }
 
 },{}],3:[function(require,module,exports){
+// String to DOM function
+var domify = require('domify')
+// classList polyfill for old browsers
+require('classlist-polyfill')
+
 // Object.assign polyfill
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-module.exports = Object.assign || function assignPoly (target) {
-  if (target == null) {
-    throw new TypeError('Cannot convert undefined or null to object')
-  }
+if (typeof Object.assign !== 'function') {
+  Object.assign = function (target) {
+    if (target == null) {
+      throw new TypeError('Cannot convert undefined or null to object')
+    }
 
-  target = Object(target)
-  for (var index = 1; index < arguments.length; index++) {
-    var source = arguments[index]
-    if (source != null) {
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key]
+    target = Object(target)
+    for (var index = 1; index < arguments.length; index++) {
+      var source = arguments[index]
+      if (source != null) {
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key]
+          }
         }
       }
     }
+    return target
   }
-  return target
 }
-
-},{}],4:[function(require,module,exports){
-// String to DOM function
-var domify = require('domify')
-// Object.assign
-var assign = require('./assign')
-// classList polyfill for old versions of IE/Firefox
-require('classlist-polyfill')
 
 // Detect CSS Animation End Support
 // https://github.com/limonte/sweetalert2/blob/99bd539f85e15ac170f69d35001d12e092ef0054/src/utils/dom.js#L194
@@ -458,6 +457,8 @@ var vex = {
         }
         // Run once
         this.rootEl.removeEventListener(animationEndEvent, close)
+        // Remove from lookup table (prevent memory leaks)
+        delete vexes[this.id]
         // Remove the dialog from the DOM
         this.rootEl.parentNode.removeChild(this.rootEl)
         // Call after close callback
@@ -495,9 +496,6 @@ var vex = {
         close()
       }
 
-      // Remove from lookup table (prevent memory leaks)
-      delete vexes[this.id]
-
       return true
     }
 
@@ -508,18 +506,18 @@ var vex = {
       }
     }
     // Store options on instance for future reference
-    var options = vexInstance.options = assign({}, vex.defaultOptions, opts)
+    var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
 
     // vex root
     var rootEl = vexInstance.rootEl = document.createElement('div')
-    rootEl.classList = baseClassNames.vex
+    rootEl.classList.add(baseClassNames.vex)
     if (options.className) {
       rootEl.classList.add(options.className)
     }
 
     // Overlay
     var overlayEl = vexInstance.overlayEl = document.createElement('div')
-    overlayEl.classList = baseClassNames.overlay
+    overlayEl.classList.add(baseClassNames.overlay)
     if (options.overlayClassName) {
       overlayEl.classList.add(options.overlayClassName)
     }
@@ -534,7 +532,7 @@ var vex = {
 
     // Content
     var contentEl = vexInstance.contentEl = document.createElement('div')
-    contentEl.classList = baseClassNames.content
+    contentEl.classList.add(baseClassNames.content)
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
@@ -544,7 +542,7 @@ var vex = {
     // Close button
     if (options.showCloseButton) {
       var closeEl = vexInstance.closeEl = document.createElement('div')
-      closeEl.classList = baseClassNames.close
+      closeEl.classList.add(baseClassNames.close)
       if (options.closeClassName) {
         closeEl.classList.add(options.closeClassName)
       }
@@ -650,5 +648,5 @@ vex.registerPlugin = function (plugin, name) {
 
 module.exports = vex
 
-},{"./assign":3,"classlist-polyfill":1,"domify":2}]},{},[4])(4)
+},{"classlist-polyfill":1,"domify":2}]},{},[3])(3)
 });
