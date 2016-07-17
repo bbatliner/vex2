@@ -61,7 +61,7 @@ var globalId = 1
 // vex itself is an object that exposes a simple API to open and close vex objects in various ways
 var vex = {
   open: function (opts) {
-    // the dialog instance
+    // The dialog instance
     var vexInstance = {}
 
     // Set id
@@ -81,6 +81,7 @@ var vex = {
     }
 
     // Close function on the vex instance
+    // This is how all API functions should close individual vexes
     vexInstance.close = function () {
       // Check state
       if (!this.isOpen) {
@@ -90,9 +91,11 @@ var vex = {
       var options = this.options
 
       var beforeClose = function () {
+        // Call before close callback
         if (options.beforeClose) {
           return options.beforeClose.call(this)
         }
+        // Otherwise indicate that it's ok to continue with close
         return true
       }.bind(this)
 
@@ -104,13 +107,13 @@ var vex = {
         this.rootEl.removeEventListener(animationEndEvent, close)
         // Remove the dialog from the DOM
         this.rootEl.parentNode.removeChild(this.rootEl)
-        // Remove styling from the body during the next tick
-        setTimeout(function () {
-          document.body.classList.remove(baseClassNames.open)
-        }, 0)
         // Call after close callback
         if (options.afterClose) {
           options.afterClose.call(this)
+        }
+        // Remove styling from the body, if no more vexes are open
+        if (Object.keys(vexes).length === 0) {
+          document.body.classList.remove(baseClassNames.open)
         }
       }.bind(this)
 
@@ -141,6 +144,9 @@ var vex = {
 
       // Cleanup global handler for ESC
       window.removeEventListener('keyup', escHandler)
+      
+      // Remove from lookup table (prevent memory leaks)
+      delete vexes[this.id]
 
       return true
     }
@@ -155,6 +161,7 @@ var vex = {
         content: opts
       }
     }
+    // Store options on instance for future reference
     var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
 
     // vex root
@@ -207,11 +214,10 @@ var vex = {
       options.afterOpen.call(vexInstance)
     }
 
-    // Apply styling to the body during the next tick
-    setTimeout(function () {
-      document.body.classList.add(baseClassNames.open)
-    }, 0)
+    // Apply styling to the body
+    document.body.classList.add(baseClassNames.open)
 
+    // Return the created vex instance
     return vexInstance
   },
 
