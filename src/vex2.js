@@ -54,12 +54,14 @@ var baseClassNames = {
 // String to DOM function
 var domify = require('domify')
 
+// Private lookup table of all open vex objects, keyed by id
 var vexes = {}
 var globalId = 1
 
+// vex itself is an object that exposes a simple API to open and close vex objects in various ways
 var vex = {
   open: function (opts) {
-    // vex object
+    // the dialog instance
     var vexInstance = {}
 
     // Set id
@@ -78,7 +80,7 @@ var vex = {
       }
     }
 
-    // Close function on the vex object
+    // Close function on the vex instance
     vexInstance.close = function () {
       // Check state
       if (!this.isOpen) {
@@ -112,6 +114,7 @@ var vex = {
         }
       }.bind(this)
 
+      // If any user-defined validation or anything fails, abort the close
       if (beforeClose() === false) {
         return false
       }
@@ -119,7 +122,7 @@ var vex = {
       // Update state
       this.isOpen = false
 
-      // Detect animation support
+      // Detect if the content el has any CSS animations defined
       var style = window.getComputedStyle(this.contentEl)
       function hasAnimationPre (prefix) {
         return style.getPropertyValue(prefix + 'animation-name') !== 'none' && style.getPropertyValue(prefix + 'animation-duration') !== '0s'
@@ -128,7 +131,9 @@ var vex = {
 
       // Close the vex
       if (animationEndEvent && hasAnimation) {
+        // Setup the end event listener, to remove the el from the DOM
         this.rootEl.addEventListener(animationEndEvent, close)
+        // Add the closing class to the dialog, showing the close animation
         this.rootEl.classList.add(baseClassNames.closing)
       } else {
         close()
@@ -152,7 +157,7 @@ var vex = {
     }
     var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
 
-    // vex
+    // vex root
     var rootEl = vexInstance.rootEl = document.createElement('div')
     rootEl.classList = baseClassNames.vex
     if (options.className) {
@@ -194,7 +199,7 @@ var vex = {
       contentEl.appendChild(closeEl)
     }
 
-    // Inject DOM
+    // Add to DOM
     document.querySelector(options.appendLocation).appendChild(rootEl)
 
     // Call after open callback
@@ -210,6 +215,7 @@ var vex = {
     return vexInstance
   },
 
+  // A top-level vex.close function to close dialogs by reference or id
   close: function (vexOrId) {
     var id
     if (vexOrId.id) {
@@ -222,6 +228,7 @@ var vex = {
     return vexes[id].close()
   },
 
+  // Close every vex!
   closeAll: function () {
     for (var id in vexes) {
       this.close(id)
@@ -229,10 +236,12 @@ var vex = {
     return true
   },
 
+  // A getter for the internal lookup table
   getAll: function () {
     return vexes
   },
 
+  // A getter for the internal lookup table
   getById: function (id) {
     return vexes[id]
   }
@@ -252,6 +261,7 @@ vex.defaultOptions = {
 
 // TODO Loading symbols?
 
+// Plugin system!
 vex.registerPlugin = function (plugin, name) {
   var pluginName = name || plugin.pluginName || plugin.name
   if (vex[pluginName]) {
