@@ -149,18 +149,18 @@ var vex = {
       }
     }
     // Store options on instance for future reference
-    var options = vexInstance.options = assign({}, vex.defaultOptions, opts)
+    var options = vexInstance.options = Object.assign({}, vex.defaultOptions, opts)
 
     // vex root
     var rootEl = vexInstance.rootEl = document.createElement('div')
-    rootEl.classList = baseClassNames.vex
+    rootEl.classList.add(baseClassNames.vex)
     if (options.className) {
       rootEl.classList.add(options.className)
     }
 
     // Overlay
     var overlayEl = vexInstance.overlayEl = document.createElement('div')
-    overlayEl.classList = baseClassNames.overlay
+    overlayEl.classList.add(baseClassNames.overlay)
     if (options.overlayClassName) {
       overlayEl.classList.add(options.overlayClassName)
     }
@@ -175,7 +175,7 @@ var vex = {
 
     // Content
     var contentEl = vexInstance.contentEl = document.createElement('div')
-    contentEl.classList = baseClassNames.content
+    contentEl.classList.add(baseClassNames.content)
     if (options.contentClassName) {
       contentEl.classList.add(options.contentClassName)
     }
@@ -185,7 +185,7 @@ var vex = {
     // Close button
     if (options.showCloseButton) {
       var closeEl = vexInstance.closeEl = document.createElement('div')
-      closeEl.classList = baseClassNames.close
+      closeEl.classList.add(baseClassNames.close)
       if (options.closeClassName) {
         closeEl.classList.add(options.closeClassName)
       }
