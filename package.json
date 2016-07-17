@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "classlist-polyfill": "^1.0.3",
-    "domify": "^1.4.0"
+    "domify": "^1.4.0",
+    "vex2-dialog": "^2.0.1"
   }
 }
